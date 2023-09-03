@@ -10,8 +10,21 @@ Matrix_name = "PureMatrix"
 Vector_name = "PureVector"
 
 class UnsupportedOperandTypeError(TypeError):
-    def __init__(self, a, b):
-        raise TypeError(f"unsupported operand type(s) for +: '{type(a).__name__}' and '{type(b).__name__}'")
+    def __init__(self, a, b, oper_str):
+        raise TypeError(f"unsupported operand type(s) for {oper_str}: '{type(a).__name__}' and '{type(b).__name__}'")
+    
+
+
+def naive(cls):
+    cls.isNaiveClass = True
+
+    return cls
+
+def size(obj):
+    return obj.size()
+
+class EmptyObj:
+    pass
 
 
 

@@ -1,8 +1,9 @@
 # For postponed evaluation of annotations
 from __future__ import annotations 
-from settings import UnsupportedOperandTypeError
-from roles import Real
+from settings import UnsupportedOperandTypeError, naive, size, EmptyObj
 from functools import reduce
+
+Real = float
 
 class PureMatrix:
     def __init__(self, rows: list[list[Real]]):
@@ -116,6 +117,48 @@ class PureVector(PureMatrix):
                 raise ValueError(f"the first matrix's number of column ({PureMatrix.size(x)[1]}) should be equal to the second matrix's number of row ({PureMatrix.size(A)[0]})")
         else:
             raise UnsupportedOperandTypeError(x, A)
+        
+    def inner_prod(u, v):
+        return u.elements[0]*v.elements[0] + u.elements[1]*v.elements[1] #FIXME
+    
+
+
+
+
+@naive
+class NaiveMatrix:
+    def __init__(self, elements: list[list[float]]):
+        self.body = EmptyObj()
+        self.body.elements = elements
+
+    def size(self):
+        return (len(self.body.elements), len(self.body.elements[0]))
+
+    def __repr__(self):
+        return str(self.body.elements)
+
+    def __add__(self, other):
+        if isinstance(other, NaiveMatrix) and size(self) == size(other):
+            return NaiveMatrix(
+                [[selfElement + otherElement for selfElement, otherElement in zip(selfRow, otherRow)]
+                    for selfRow, otherRow in zip(self.body.elements, other.body.elements)])
+
+
+@naive
+class NaiveVector(NaiveMatrix):
+    def __init__(self, elements: list[float]):
+        self.body = EmptyObj()
+        self.body.elements = [[element] for element in elements]
+        self.body.column = elements
+
+    def __repr__(self):
+        return str(self.body.column)
+    
+    def __add__(self, other):
+        if isinstance(other, NaiveVector) and size(self) == size(other):
+            return NaiveVector(
+                [selfElement + otherElement for selfElement, otherElement
+                  in zip(self.body.column, other.body.column)])
 
 
 
