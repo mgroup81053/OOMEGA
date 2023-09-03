@@ -63,6 +63,7 @@ class Function:
     def __repr__(self):
         self.plot()
         plt.show()
+        return ""
 
     def __call__(self, *arg, **kwarg):
         return self.varValueGetter(self, *arg, **kwarg)
